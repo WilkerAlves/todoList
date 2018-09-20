@@ -7,10 +7,12 @@ export default {
   methods: {
     addTask($event) {
       let value = $event.target.value;
-      let t = new Task();
-      t.completed = false;
-      t.title = value;
-      console.log(t);
+      let task = new Task();
+      task.completed = false;
+      task.title = value;
+      this.$emit("newTask", task);
+      $event.target.value = "";
+      console.log(task);
     }
   }
 };

@@ -1,14 +1,39 @@
 <script>
+let i = 1;
+
 export default {
-  props: ["todoList"]
+  props: ["todoList"],
+  computed: {
+    sortedTasks: {
+      get: function() {
+        let sorted = this.todoList;
+        return sorted.sort(function(a, b) {
+          if (a.title < b.title) return -1;
+          if (a.title > b.title) return 1;
+          return 0;
+        });
+      },
+      set: function(novaLista) {
+        this.todoList.concat(novaLista);
+      }
+    }
+  },
+  methods: {
+    completeTask(task) {
+      task.completed = !task.completed;
+    }
+  }
 };
 </script>
 
 <template>
   <ul class="todo-list">
-    <li v-for="todo in todoList" :key="todo.id" class="todo">
+    <li v-for="(todo,index) in sortedTasks" :key="index" class="todo">
       <div class="view">
-        <label>{{todo.title}}</label>
+        <input class="toggle" type="checkbox" @click="completeTask(todo)">
+        <label :class="{'todo-completed':todo.completed}">{{todo.title}}</label>
+        <!-- <label v-if="todo.completed" class="todo-completed">{{todo.title}}</label>
+        <label v-else >{{todo.title}}</label> -->
       </div>
     </li>
   </ul>
